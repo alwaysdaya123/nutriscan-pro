@@ -1,7 +1,24 @@
 import { Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Header() {
+  const { user, profile, loading } = useAuth();
+
+  const getInitials = () => {
+    if (profile?.full_name) {
+      return profile.full_name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    return user?.email?.charAt(0).toUpperCase() || 'U';
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 glass">
       <div className="container flex h-16 items-center justify-between">
@@ -11,19 +28,46 @@ export function Header() {
           </div>
           <span className="text-xl font-bold text-foreground">NutriScan</span>
         </Link>
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4">
           <Link
             to="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hidden sm:block"
           >
             Home
           </Link>
           <Link
             to="/analyze"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hidden sm:block"
           >
             Analyze
           </Link>
+
+          {!loading && (
+            <>
+              {user ? (
+                <Link to="/dashboard">
+                  <Button variant="ghost" className="gap-2">
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage src={profile?.avatar_url || undefined} />
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                        {getInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:inline">Dashboard</span>
+                  </Button>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link to="/auth/signin">
+                    <Button variant="ghost" size="sm">Sign In</Button>
+                  </Link>
+                  <Link to="/auth/signup">
+                    <Button size="sm">Get Started</Button>
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
         </nav>
       </div>
     </header>
