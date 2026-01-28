@@ -1,13 +1,20 @@
-import { Flame, Beef, Wheat, Droplets, Apple, Cookie, AlertCircle, Lightbulb, RefreshCw, CheckCircle2 } from "lucide-react";
+import { useState } from 'react';
+import { Flame, Beef, Wheat, Droplets, Apple, Cookie, AlertCircle, Lightbulb, RefreshCw, CheckCircle2, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { NutritionData } from "@/types/nutrition";
+import type { PortionSize } from "@/types/database";
+import { useAuth } from "@/contexts/AuthContext";
+import { useMeals } from "@/hooks/useMeals";
+import { useToast } from "@/hooks/use-toast";
 
 interface NutritionResultsProps {
   data: NutritionData;
   imageUrl?: string;
   onReset: () => void;
+  portionSize?: PortionSize;
 }
 
 const nutritionItems = [
@@ -19,8 +26,62 @@ const nutritionItems = [
   { key: "sugar", label: "Sugar", unit: "g", icon: Cookie, color: "text-pink-500", max: 50 },
 ] as const;
 
-export function NutritionResults({ data, imageUrl, onReset }: NutritionResultsProps) {
+const portionLabels: Record<PortionSize, string> = {
+  small: 'Small (70%)',
+  medium: 'Medium (Standard)',
+  large: 'Large (140%)',
+};
+
+export function NutritionResults({ data, imageUrl, onReset, portionSize = 'medium' }: NutritionResultsProps) {
+  const { user } = useAuth();
+  const { addMeal } = useMeals();
+  const { toast } = useToast();
+  const [saving, setSaving] = useState(false);
+  const [mealType, setMealType] = useState<string>('lunch');
+  
   const confidencePercent = Math.round(data.confidence * 100);
+
+  const handleSaveMeal = async () => {
+    if (!user) {
+      toast({
+        title: 'Sign in required',
+        description: 'Please sign in to save meals to your diary.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await addMeal({
+        food_name: data.foodName,
+        description: data.description,
+        calories: data.calories,
+        protein: data.protein,
+        carbs: data.carbs,
+        fat: data.fat,
+        fiber: data.fiber,
+        sugar: data.sugar,
+        sodium: data.sodium,
+        serving_size: `${portionLabels[portionSize]} - ${data.servingSize}`,
+        meal_type: mealType as any,
+        image_url: imageUrl || null,
+        logged_at: new Date().toISOString(),
+      });
+      toast({
+        title: 'Meal saved!',
+        description: 'Added to your food diary.',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save meal. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-6 animate-scale-in">
@@ -46,7 +107,7 @@ export function NutritionResults({ data, imageUrl, onReset }: NutritionResultsPr
                 <h2 className="text-2xl font-bold text-foreground">{data.foodName}</h2>
                 <p className="mt-1 text-muted-foreground">{data.description}</p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  <span className="font-medium">Serving size:</span> {data.servingSize}
+                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {data.servingSize}
                 </p>
               </div>
               <div className="text-right">
@@ -75,7 +136,7 @@ export function NutritionResults({ data, imageUrl, onReset }: NutritionResultsPr
                     <div>
                       <p className="text-sm text-muted-foreground">{item.label}</p>
                       <p className="text-xl font-bold text-foreground">
-                        {value}
+                        {typeof value === 'number' ? value.toFixed(item.key === 'calories' ? 0 : 1) : value}
                         <span className="text-sm font-normal text-muted-foreground ml-1">
                           {item.unit}
                         </span>
@@ -96,7 +157,7 @@ export function NutritionResults({ data, imageUrl, onReset }: NutritionResultsPr
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircle className="h-4 w-4 text-warning" />
+              <AlertCircle className="h-4 w-4 text-amber-500" />
               Sodium
             </CardTitle>
           </CardHeader>
@@ -151,6 +212,41 @@ export function NutritionResults({ data, imageUrl, onReset }: NutritionResultsPr
                   {alt}
                 </span>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Save to Diary */}
+      {user && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="p-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex-1">
+                <p className="font-medium">Save to your food diary?</p>
+                <p className="text-sm text-muted-foreground">Track this meal in your daily log</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Select value={mealType} onValueChange={setMealType}>
+                  <SelectTrigger className="w-[130px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="breakfast">Breakfast</SelectItem>
+                    <SelectItem value="lunch">Lunch</SelectItem>
+                    <SelectItem value="dinner">Dinner</SelectItem>
+                    <SelectItem value="snack">Snack</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button onClick={handleSaveMeal} disabled={saving}>
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <Save className="h-4 w-4 mr-2" />
+                  )}
+                  Save
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
