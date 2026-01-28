@@ -9,6 +9,7 @@ export type Profile = {
   weight_kg: number | null;
   activity_level: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active';
   diet_goal: 'weight_loss' | 'maintenance' | 'muscle_gain';
+  dietary_preference: 'veg' | 'non-veg' | 'vegan';
   daily_calorie_target: number;
   created_at: string;
   updated_at: string;
@@ -35,6 +36,55 @@ export type Meal = {
 
 export type MealInsert = Omit<Meal, 'id' | 'user_id' | 'created_at'>;
 
+export type MealPlan = {
+  id: string;
+  user_id: string;
+  plan_date: string;
+  meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  food_name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  description: string | null;
+  is_completed: boolean;
+  created_at: string;
+};
+
+export type WeightLog = {
+  id: string;
+  user_id: string;
+  weight_kg: number;
+  logged_at: string;
+  notes: string | null;
+};
+
+export type Notification = {
+  id: string;
+  user_id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'success' | 'reminder';
+  is_read: boolean;
+  created_at: string;
+};
+
+export type UserSettings = {
+  id: string;
+  user_id: string;
+  meal_reminders: boolean;
+  calorie_alerts: boolean;
+  hydration_reminders: boolean;
+  email_notifications: boolean;
+  reminder_times: {
+    breakfast: string;
+    lunch: string;
+    dinner: string;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
 export type DailyStats = {
   date: string;
   totalCalories: number;
@@ -50,4 +100,12 @@ export type WeeklyStats = {
   averageProtein: number;
   averageCarbs: number;
   averageFat: number;
+};
+
+export type PortionSize = 'small' | 'medium' | 'large';
+
+export const PORTION_MULTIPLIERS: Record<PortionSize, number> = {
+  small: 0.7,
+  medium: 1.0,
+  large: 1.4,
 };

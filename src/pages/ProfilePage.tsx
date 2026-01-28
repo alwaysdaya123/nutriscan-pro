@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, Save, User, Activity, Target } from 'lucide-react';
+import { Loader2, Save, User, Activity, Target, Utensils } from 'lucide-react';
 
 export default function ProfilePage() {
   const { profile, user } = useAuth();
@@ -23,6 +23,7 @@ export default function ProfilePage() {
     weight_kg: profile?.weight_kg?.toString() || '',
     activity_level: profile?.activity_level || 'moderate',
     diet_goal: profile?.diet_goal || 'maintenance',
+    dietary_preference: (profile as any)?.dietary_preference || 'non-veg',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -40,6 +41,7 @@ export default function ProfilePage() {
       weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
       activity_level: formData.activity_level,
       diet_goal: formData.diet_goal,
+      dietary_preference: formData.dietary_preference,
     };
 
     // Calculate daily calorie target if all required fields are present
@@ -266,6 +268,42 @@ export default function ProfilePage() {
                   <p className="text-3xl font-bold text-primary">{previewCalories.toLocaleString()} kcal</p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Dietary Preference */}
+          <Card className="glass">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Utensils className="h-5 w-5" />
+                Dietary Preference
+              </CardTitle>
+              <CardDescription>
+                For personalized meal planning
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  { value: 'non-veg', label: 'Non-Vegetarian', desc: 'Includes meat & fish' },
+                  { value: 'veg', label: 'Vegetarian', desc: 'No meat or fish' },
+                  { value: 'vegan', label: 'Vegan', desc: 'Plant-based only' },
+                ].map((pref) => (
+                  <button
+                    key={pref.value}
+                    type="button"
+                    onClick={() => handleChange('dietary_preference', pref.value)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all ${
+                      formData.dietary_preference === pref.value
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <p className="font-medium">{pref.label}</p>
+                    <p className="text-xs text-muted-foreground">{pref.desc}</p>
+                  </button>
+                ))}
+              </div>
             </CardContent>
           </Card>
 

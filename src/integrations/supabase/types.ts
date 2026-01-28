@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      meal_plans: {
+        Row: {
+          calories: number
+          carbs: number | null
+          created_at: string
+          description: string | null
+          fat: number | null
+          food_name: string
+          id: string
+          is_completed: boolean | null
+          meal_type: string
+          plan_date: string
+          protein: number | null
+          user_id: string
+        }
+        Insert: {
+          calories: number
+          carbs?: number | null
+          created_at?: string
+          description?: string | null
+          fat?: number | null
+          food_name: string
+          id?: string
+          is_completed?: boolean | null
+          meal_type: string
+          plan_date: string
+          protein?: number | null
+          user_id: string
+        }
+        Update: {
+          calories?: number
+          carbs?: number | null
+          created_at?: string
+          description?: string | null
+          fat?: number | null
+          food_name?: string
+          id?: string
+          is_completed?: boolean | null
+          meal_type?: string
+          plan_date?: string
+          protein?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       meals: {
         Row: {
           calories: number
@@ -71,6 +116,36 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activity_level: string | null
@@ -79,6 +154,7 @@ export type Database = {
           created_at: string
           daily_calorie_target: number | null
           diet_goal: string | null
+          dietary_preference: string | null
           full_name: string | null
           gender: string | null
           height_cm: number | null
@@ -94,6 +170,7 @@ export type Database = {
           created_at?: string
           daily_calorie_target?: number | null
           diet_goal?: string | null
+          dietary_preference?: string | null
           full_name?: string | null
           gender?: string | null
           height_cm?: number | null
@@ -109,6 +186,7 @@ export type Database = {
           created_at?: string
           daily_calorie_target?: number | null
           diet_goal?: string | null
+          dietary_preference?: string | null
           full_name?: string | null
           gender?: string | null
           height_cm?: number | null
@@ -137,6 +215,66 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          calorie_alerts: boolean | null
+          created_at: string
+          email_notifications: boolean | null
+          hydration_reminders: boolean | null
+          id: string
+          meal_reminders: boolean | null
+          reminder_times: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calorie_alerts?: boolean | null
+          created_at?: string
+          email_notifications?: boolean | null
+          hydration_reminders?: boolean | null
+          id?: string
+          meal_reminders?: boolean | null
+          reminder_times?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calorie_alerts?: boolean | null
+          created_at?: string
+          email_notifications?: boolean | null
+          hydration_reminders?: boolean | null
+          id?: string
+          meal_reminders?: boolean | null
+          reminder_times?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      weight_logs: {
+        Row: {
+          id: string
+          logged_at: string
+          notes: string | null
+          user_id: string
+          weight_kg: number
+        }
+        Insert: {
+          id?: string
+          logged_at?: string
+          notes?: string | null
+          user_id: string
+          weight_kg: number
+        }
+        Update: {
+          id?: string
+          logged_at?: string
+          notes?: string | null
+          user_id?: string
+          weight_kg?: number
         }
         Relationships: []
       }
