@@ -260,7 +260,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         </form>
       </CardContent>
 
-      <CardFooter className="justify-center">
+      <CardFooter className="flex-col gap-3">
         <p className="text-sm text-muted-foreground">
           {mode === 'signin' ? (
             <>
@@ -278,6 +278,14 @@ export function AuthForm({ mode }: AuthFormProps) {
             </>
           )}
         </p>
+        {mode === 'signin' && (
+          <a
+            href="/auth/forgot-password"
+            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            Forgot your password?
+          </a>
+        )}
       </CardFooter>
     </Card>
   );

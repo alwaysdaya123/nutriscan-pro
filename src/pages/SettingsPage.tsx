@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Bell, Mail, Droplets, Utensils, AlertTriangle, Settings, Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Bell, Mail, Droplets, Utensils, AlertTriangle, Settings, FileText, Shield } from 'lucide-react';
 import { useUserSettings } from '@/hooks/useUserSettings';
+import { AccessibilitySettings } from '@/components/settings/AccessibilitySettings';
 
 export default function SettingsPage() {
   const { settings, loading, toggleSetting } = useUserSettings();
@@ -13,8 +16,13 @@ export default function SettingsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
         <DashboardHeader />
-        <main className="container py-6 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <main className="container py-6 space-y-6 max-w-2xl">
+          <div>
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <Skeleton className="h-64 w-full rounded-xl" />
+          <Skeleton className="h-48 w-full rounded-xl" />
         </main>
       </div>
     );
@@ -30,7 +38,7 @@ export default function SettingsPage() {
             Settings
           </h1>
           <p className="text-muted-foreground">
-            Manage your notification preferences
+            Manage your preferences and notifications
           </p>
         </div>
 
@@ -47,7 +55,7 @@ export default function SettingsPage() {
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="meal-reminders" className="flex items-center gap-2">
+                <Label htmlFor="meal-reminders" className="flex items-center gap-2 cursor-pointer">
                   <Utensils className="h-4 w-4 text-muted-foreground" />
                   Meal Reminders
                 </Label>
@@ -64,7 +72,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="calorie-alerts" className="flex items-center gap-2">
+                <Label htmlFor="calorie-alerts" className="flex items-center gap-2 cursor-pointer">
                   <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                   Calorie Alerts
                 </Label>
@@ -81,7 +89,7 @@ export default function SettingsPage() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="hydration-reminders" className="flex items-center gap-2">
+                <Label htmlFor="hydration-reminders" className="flex items-center gap-2 cursor-pointer">
                   <Droplets className="h-4 w-4 text-muted-foreground" />
                   Hydration Reminders
                 </Label>
@@ -99,7 +107,7 @@ export default function SettingsPage() {
             <div className="border-t pt-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="email-notifications" className="flex items-center gap-2">
+                  <Label htmlFor="email-notifications" className="flex items-center gap-2 cursor-pointer">
                     <Mail className="h-4 w-4 text-muted-foreground" />
                     Email Notifications
                   </Label>
@@ -114,6 +122,41 @@ export default function SettingsPage() {
                 />
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Accessibility Settings */}
+        <AccessibilitySettings />
+
+        {/* Legal Links */}
+        <Card className="glass">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5" />
+              Legal & Privacy
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Link 
+              to="/privacy" 
+              className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium">Privacy Policy</span>
+              </div>
+              <span className="text-muted-foreground">→</span>
+            </Link>
+            <Link 
+              to="/terms" 
+              className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium">Terms of Service</span>
+              </div>
+              <span className="text-muted-foreground">→</span>
+            </Link>
           </CardContent>
         </Card>
 
