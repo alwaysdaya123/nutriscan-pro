@@ -9,12 +9,15 @@ import type { PortionSize } from "@/types/database";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMeals } from "@/hooks/useMeals";
 import { useToast } from "@/hooks/use-toast";
+import { CalorieDisclaimer } from "./CalorieDisclaimer";
+import { ManualCorrectionForm } from "./ManualCorrectionForm";
 
 interface NutritionResultsProps {
   data: NutritionData;
   imageUrl?: string;
   onReset: () => void;
   portionSize?: PortionSize;
+  onDataCorrect?: (corrected: NutritionData) => void;
 }
 
 const nutritionItems = [
@@ -32,14 +35,24 @@ const portionLabels: Record<PortionSize, string> = {
   large: 'Large (140%)',
 };
 
-export function NutritionResults({ data, imageUrl, onReset, portionSize = 'medium' }: NutritionResultsProps) {
+export function NutritionResults({ data, imageUrl, onReset, portionSize = 'medium', onDataCorrect }: NutritionResultsProps) {
   const { user } = useAuth();
   const { addMeal } = useMeals();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
   const [mealType, setMealType] = useState<string>('lunch');
+  const [currentData, setCurrentData] = useState(data);
   
-  const confidencePercent = Math.round(data.confidence * 100);
+  const confidencePercent = Math.round(currentData.confidence * 100);
+
+  const handleCorrect = (corrected: NutritionData) => {
+    setCurrentData(corrected);
+    onDataCorrect?.(corrected);
+    toast({
+      title: 'Values updated',
+      description: 'Nutritional values have been corrected.',
+    });
+  };
 
   const handleSaveMeal = async () => {
     if (!user) {
@@ -54,16 +67,16 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
     setSaving(true);
     try {
       await addMeal({
-        food_name: data.foodName,
-        description: data.description,
-        calories: data.calories,
-        protein: data.protein,
-        carbs: data.carbs,
-        fat: data.fat,
-        fiber: data.fiber,
-        sugar: data.sugar,
-        sodium: data.sodium,
-        serving_size: `${portionLabels[portionSize]} - ${data.servingSize}`,
+        food_name: currentData.foodName,
+        description: currentData.description,
+        calories: currentData.calories,
+        protein: currentData.protein,
+        carbs: currentData.carbs,
+        fat: currentData.fat,
+        fiber: currentData.fiber,
+        sugar: currentData.sugar,
+        sodium: currentData.sodium,
+        serving_size: `${portionLabels[portionSize]} - ${currentData.servingSize}`,
         meal_type: mealType as any,
         image_url: imageUrl || null,
         logged_at: new Date().toISOString(),
@@ -85,6 +98,9 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
 
   return (
     <div className="space-y-6 animate-scale-in">
+      {/* Calorie Disclaimer */}
+      <CalorieDisclaimer confidence={currentData.confidence} />
+
       {/* Food Card */}
       <Card className="overflow-hidden">
         <div className="flex flex-col md:flex-row">
@@ -92,7 +108,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
             <div className="relative h-48 md:h-auto md:w-1/3">
               <img
                 src={imageUrl}
-                alt={data.foodName}
+                alt={currentData.foodName}
                 className="h-full w-full object-cover"
               />
               <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-xs font-medium backdrop-blur-sm">
@@ -104,14 +120,14 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
           <div className="flex-1 p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">{data.foodName}</h2>
-                <p className="mt-1 text-muted-foreground">{data.description}</p>
+                <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
+                <p className="mt-1 text-muted-foreground">{currentData.description}</p>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {data.servingSize}
+                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
                 </p>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold text-primary">{data.calories}</div>
+                <div className="text-3xl font-bold text-primary">{currentData.calories}</div>
                 <div className="text-sm text-muted-foreground">kcal</div>
               </div>
             </div>
@@ -119,10 +135,13 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         </div>
       </Card>
 
+      {/* Manual Correction */}
+      <ManualCorrectionForm data={currentData} onCorrect={handleCorrect} />
+
       {/* Nutrition Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {nutritionItems.map((item) => {
-          const value = data[item.key as keyof typeof data] as number;
+          const value = currentData[item.key as keyof typeof currentData] as number;
           const percentage = Math.min((value / item.max) * 100, 100);
           
           return (
@@ -163,17 +182,17 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold text-foreground">
-              {data.sodium}
+              {currentData.sodium}
               <span className="text-sm font-normal text-muted-foreground ml-1">mg</span>
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {data.sodium < 500 ? "Low sodium content" : data.sodium < 1500 ? "Moderate sodium" : "High sodium content"}
+              {currentData.sodium < 500 ? "Low sodium content" : currentData.sodium < 1500 ? "Moderate sodium" : "High sodium content"}
             </p>
           </CardContent>
         </Card>
 
         {/* Health Tips Card */}
-        {data.healthTips && data.healthTips.length > 0 && (
+        {currentData.healthTips && currentData.healthTips.length > 0 && (
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -183,7 +202,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
             </CardHeader>
             <CardContent>
               <ul className="space-y-1">
-                {data.healthTips.slice(0, 3).map((tip, index) => (
+                {currentData.healthTips.slice(0, 3).map((tip, index) => (
                   <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
                     <span className="text-primary">•</span>
                     {tip}
@@ -196,7 +215,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
       </div>
 
       {/* Alternatives */}
-      {data.alternatives && data.alternatives.length > 0 && (
+      {currentData.alternatives && currentData.alternatives.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Healthier Alternatives</CardTitle>
@@ -204,7 +223,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {data.alternatives.map((alt, index) => (
+              {currentData.alternatives.map((alt, index) => (
                 <span
                   key={index}
                   className="inline-flex items-center rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground"

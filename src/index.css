@@ -94,6 +94,32 @@ All colors MUST be HSL.
     --sidebar-border: 150 15% 20%;
     --sidebar-ring: 145 63% 45%;
   }
+  /* High Contrast Mode */
+  .high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --primary: 145 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 80%;
+    --accent: 145 100% 40%;
+    --accent-foreground: 0 0% 0%;
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+  }
+
+  /* Reduced Motion */
+  .reduced-motion *,
+  .reduced-motion *::before,
+  .reduced-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @layer base {
@@ -103,6 +129,17 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground antialiased;
+  }
+
+  /* Focus visible styles for keyboard navigation */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary ring-0;
+  }
+
+  /* Skip to content link */
+  .skip-link {
+    @apply absolute -top-10 left-4 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-md;
+    @apply focus:top-4 transition-all;
   }
 }
 
@@ -135,8 +172,24 @@ All colors MUST be HSL.
     animation: scaleIn 0.3s ease-out forwards;
   }
 
+  .animate-success {
+    animation: successPop 0.4s ease-out forwards;
+  }
+
   .glass {
     @apply bg-card/80 backdrop-blur-md;
+  }
+
+  /* Loading skeleton shimmer */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
 }
 
@@ -177,5 +230,28 @@ All colors MUST be HSL.
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes successPop {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
