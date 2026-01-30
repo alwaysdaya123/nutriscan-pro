@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Flame, Target, TrendingUp, TrendingDown } from 'lucide-react';
+import { Flame, Target, TrendingUp, TrendingDown, CheckCircle, PartyPopper } from 'lucide-react';
 import type { DailyStats } from '@/types/database';
 
 type CalorieProgressProps = {
@@ -15,21 +15,27 @@ export function CalorieProgress({ todayStats }: CalorieProgressProps) {
   const consumed = todayStats?.totalCalories || 0;
   const remaining = target - consumed;
   const percentage = Math.min((consumed / target) * 100, 100);
+  const isGoalReached = percentage >= 95 && percentage <= 105;
+  const isOverLimit = percentage > 105;
 
   const getStatusColor = () => {
-    if (percentage > 100) return 'text-destructive';
+    if (isOverLimit) return 'text-destructive';
     if (percentage >= 90) return 'text-amber-500';
     return 'text-primary';
   };
 
   const getStatusIcon = () => {
-    if (percentage > 100) return <TrendingUp className="h-5 w-5 text-destructive" />;
+    if (isGoalReached) return <CheckCircle className="h-5 w-5 text-primary animate-success" />;
+    if (isOverLimit) return <TrendingUp className="h-5 w-5 text-destructive" />;
     if (percentage >= 90) return <Target className="h-5 w-5 text-amber-500" />;
     return <Flame className="h-5 w-5 text-primary" />;
   };
 
   return (
     <Card className="glass overflow-hidden">
+      {isGoalReached && (
+        <div className="h-1 bg-gradient-to-r from-primary via-accent to-primary animate-pulse" />
+      )}
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between text-lg">
           <span>Today's Calories</span>
@@ -38,8 +44,8 @@ export function CalorieProgress({ todayStats }: CalorieProgressProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-end justify-between">
-          <div>
-            <span className={`text-4xl font-bold ${getStatusColor()}`}>
+          <div className="animate-fade-in">
+            <span className={`text-4xl font-bold ${getStatusColor()} transition-colors`}>
               {consumed.toLocaleString()}
             </span>
             <span className="text-lg text-muted-foreground ml-1">
@@ -57,7 +63,7 @@ export function CalorieProgress({ todayStats }: CalorieProgressProps) {
         <div className="space-y-2">
           <Progress 
             value={percentage} 
-            className="h-3"
+            className="h-3 transition-all"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>0%</span>
@@ -66,8 +72,15 @@ export function CalorieProgress({ todayStats }: CalorieProgressProps) {
           </div>
         </div>
 
-        {percentage > 100 && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+        {isGoalReached && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 text-primary text-sm animate-scale-in">
+            <PartyPopper className="h-4 w-4" />
+            <span className="font-medium">Amazing! You've reached your daily goal!</span>
+          </div>
+        )}
+
+        {isOverLimit && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm animate-fade-in">
             <TrendingDown className="h-4 w-4" />
             <span>You've exceeded your daily goal by {(consumed - target).toLocaleString()} kcal</span>
           </div>

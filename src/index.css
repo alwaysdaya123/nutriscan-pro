@@ -176,6 +176,18 @@ All colors MUST be HSL.
     animation: successPop 0.4s ease-out forwards;
   }
 
+  .animate-bounce-subtle {
+    animation: bounceSoft 2s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-streak-fire {
+    animation: streakFire 1.5s ease-in-out infinite;
+  }
+
   .glass {
     @apply bg-card/80 backdrop-blur-md;
   }
@@ -190,6 +202,21 @@ All colors MUST be HSL.
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
+  }
+
+  /* Interactive hover effects */
+  .hover-lift {
+    @apply transition-all duration-200;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  /* Success checkmark animation */
+  .animate-check {
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    animation: drawCheck 0.5s ease forwards 0.2s;
   }
 }
 
@@ -253,5 +280,56 @@ All colors MUST be HSL.
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+@keyframes bounceSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px hsl(var(--primary) / 0.3);
+  }
+  to {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.6);
+  }
+}
+
+@keyframes streakFire {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Page transition wrapper */
+.page-transition {
+  animation: pageEnter 0.3s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
