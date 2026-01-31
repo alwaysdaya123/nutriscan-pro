@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/hooks/useNotifications';
+import { useIsAdmin } from '@/hooks/useAdmin';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -14,12 +15,13 @@ import {
 import { NotificationsDropdown } from '@/components/notifications/NotificationsDropdown';
 import { 
   Leaf, LayoutDashboard, UtensilsCrossed, User, Camera, LogOut, ChevronDown,
-  Calendar, TrendingUp, Settings, History
+  Calendar, TrendingUp, Settings, History, Shield
 } from 'lucide-react';
 
 export function DashboardHeader() {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const { data: isAdmin } = useIsAdmin();
   const {
     notifications,
     unreadCount,
@@ -87,6 +89,14 @@ export function DashboardHeader() {
               Progress
             </Button>
           </Link>
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="ghost" className="gap-2 text-primary">
+                <Shield className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -140,6 +150,17 @@ export function DashboardHeader() {
                   Diet History
                 </Link>
               </DropdownMenuItem>
+              {isAdmin && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link to="/admin" className="flex items-center gap-2 text-primary">
+                      <Shield className="h-4 w-4" />
+                      Admin Panel
+                    </Link>
+                  </DropdownMenuItem>
+                </>
+              )}
               <DropdownMenuSeparator className="lg:hidden" />
               <DropdownMenuItem asChild className="cursor-pointer lg:hidden">
                 <Link to="/dashboard" className="flex items-center gap-2">

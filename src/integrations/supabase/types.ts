@@ -14,6 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: string | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: []
+      }
+      food_items: {
+        Row: {
+          calories: number
+          carbs: number | null
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          fat: number | null
+          fiber: number | null
+          id: string
+          is_verified: boolean | null
+          name: string
+          protein: number | null
+          serving_size: string | null
+          sodium: number | null
+          sugar: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          calories: number
+          carbs?: number | null
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          fat?: number | null
+          fiber?: number | null
+          id?: string
+          is_verified?: boolean | null
+          name: string
+          protein?: number | null
+          serving_size?: string | null
+          sodium?: number | null
+          sugar?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          calories?: number
+          carbs?: number | null
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          fat?: number | null
+          fiber?: number | null
+          id?: string
+          is_verified?: boolean | null
+          name?: string
+          protein?: number | null
+          serving_size?: string | null
+          sodium?: number | null
+          sugar?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       meal_plans: {
         Row: {
           calories: number
@@ -159,6 +246,7 @@ export type Database = {
           gender: string | null
           height_cm: number | null
           id: string
+          is_active: boolean | null
           updated_at: string
           user_id: string
           weight_kg: number | null
@@ -175,6 +263,7 @@ export type Database = {
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_active?: boolean | null
           updated_at?: string
           user_id: string
           weight_kg?: number | null
@@ -191,9 +280,34 @@ export type Database = {
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_active?: boolean | null
           updated_at?: string
           user_id?: string
           weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      system_metrics: {
+        Row: {
+          id: string
+          metadata: Json | null
+          metric_name: string
+          metric_value: number
+          recorded_at: string | null
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          metric_name: string
+          metric_value: number
+          recorded_at?: string | null
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          metric_name?: string
+          metric_value?: number
+          recorded_at?: string | null
         }
         Relationships: []
       }
