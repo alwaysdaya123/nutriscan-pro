@@ -16,7 +16,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { Ingredient } from '@/types/nutrition';
 
@@ -110,48 +110,46 @@ export function IngredientsList({ ingredients }: IngredientsListProps) {
               <div className="space-y-2">
                 <p className="text-sm font-medium text-muted-foreground">Main Ingredients</p>
                 <div className="flex flex-wrap gap-2">
-                  <TooltipProvider>
-                    {majorIngredients.map((ingredient, index) => {
-                      const config = categoryConfig[ingredient.category];
-                      const IconComponent = config.icon;
-                      const hasWarnings = ingredient.warnings && ingredient.warnings.length > 0;
-                      
-                      return (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className={cn(
-                                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all hover:scale-105 cursor-default",
-                                config.color,
-                                hasWarnings && "ring-2 ring-amber-400/50"
-                              )}
-                            >
-                              <IconComponent className="h-3.5 w-3.5" />
-                              {ingredient.name}
-                              {hasWarnings && (
-                                <AlertTriangle className="h-3 w-3 text-amber-600" />
-                              )}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <div className="space-y-1">
-                              <p className="font-medium">{ingredient.name}</p>
-                              <p className="text-xs text-muted-foreground">Category: {config.label}</p>
-                              {ingredient.warnings && ingredient.warnings.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {ingredient.warnings.map(w => (
-                                    <span key={w} className="text-xs text-amber-600">
-                                      • {warningConfig[w]?.label || w}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </TooltipContent>
-                        </Tooltip>
-                      );
-                    })}
-                  </TooltipProvider>
+                  {majorIngredients.map((ingredient, index) => {
+                    const config = categoryConfig[ingredient.category];
+                    const IconComponent = config.icon;
+                    const hasWarnings = ingredient.warnings && ingredient.warnings.length > 0;
+                    
+                    return (
+                      <Tooltip key={index}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={cn(
+                              "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all hover:scale-105 cursor-default",
+                              config.color,
+                              hasWarnings && "ring-2 ring-amber-400/50"
+                            )}
+                          >
+                            <IconComponent className="h-3.5 w-3.5" />
+                            {ingredient.name}
+                            {hasWarnings && (
+                              <AlertTriangle className="h-3 w-3 text-amber-600" />
+                            )}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="space-y-1">
+                            <p className="font-medium">{ingredient.name}</p>
+                            <p className="text-xs text-muted-foreground">Category: {config.label}</p>
+                            {ingredient.warnings && ingredient.warnings.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {ingredient.warnings.map(w => (
+                                  <span key={w} className="text-xs text-amber-600">
+                                    • {warningConfig[w]?.label || w}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -161,48 +159,46 @@ export function IngredientsList({ ingredients }: IngredientsListProps) {
               <div className="space-y-2">
                 <p className="text-sm font-medium text-muted-foreground">Additional Ingredients</p>
                 <div className="flex flex-wrap gap-2">
-                  <TooltipProvider>
-                    {minorIngredients.map((ingredient, index) => {
-                      const config = categoryConfig[ingredient.category];
-                      const IconComponent = config.icon;
-                      const hasWarnings = ingredient.warnings && ingredient.warnings.length > 0;
-                      
-                      return (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className={cn(
-                                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium opacity-80 transition-all hover:opacity-100 cursor-default",
-                                config.color,
-                                hasWarnings && "ring-1 ring-amber-400/50"
-                              )}
-                            >
-                              <IconComponent className="h-3 w-3" />
-                              {ingredient.name}
-                              {hasWarnings && (
-                                <AlertTriangle className="h-2.5 w-2.5 text-amber-600" />
-                              )}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <div className="space-y-1">
-                              <p className="font-medium">{ingredient.name}</p>
-                              <p className="text-xs text-muted-foreground">Category: {config.label}</p>
-                              {ingredient.warnings && ingredient.warnings.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {ingredient.warnings.map(w => (
-                                    <span key={w} className="text-xs text-amber-600">
-                                      • {warningConfig[w]?.label || w}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          </TooltipContent>
-                        </Tooltip>
-                      );
-                    })}
-                  </TooltipProvider>
+                  {minorIngredients.map((ingredient, index) => {
+                    const config = categoryConfig[ingredient.category];
+                    const IconComponent = config.icon;
+                    const hasWarnings = ingredient.warnings && ingredient.warnings.length > 0;
+                    
+                    return (
+                      <Tooltip key={index}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={cn(
+                              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium opacity-80 transition-all hover:opacity-100 cursor-default",
+                              config.color,
+                              hasWarnings && "ring-1 ring-amber-400/50"
+                            )}
+                          >
+                            <IconComponent className="h-3 w-3" />
+                            {ingredient.name}
+                            {hasWarnings && (
+                              <AlertTriangle className="h-2.5 w-2.5 text-amber-600" />
+                            )}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="space-y-1">
+                            <p className="font-medium">{ingredient.name}</p>
+                            <p className="text-xs text-muted-foreground">Category: {config.label}</p>
+                            {ingredient.warnings && ingredient.warnings.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {ingredient.warnings.map(w => (
+                                  <span key={w} className="text-xs text-amber-600">
+                                    • {warningConfig[w]?.label || w}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
                 </div>
               </div>
             )}
