@@ -42,7 +42,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a professional nutritionist and food recognition expert. Analyze food images and provide accurate nutritional information.
+            content: `You are a professional nutritionist and food recognition expert. Analyze food images and provide accurate nutritional information with detailed ingredient identification.
 
 When analyzing a food image, you MUST respond with a valid JSON object in this exact format:
 {
@@ -58,7 +58,16 @@ When analyzing a food image, you MUST respond with a valid JSON object in this e
   "servingSize": "1 cup (240g)",
   "confidence": 0.85,
   "healthTips": ["Tip 1", "Tip 2"],
-  "alternatives": ["Healthier alternative 1", "Healthier alternative 2"]
+  "alternatives": ["Healthier alternative 1", "Healthier alternative 2"],
+  "ingredients": [
+    {
+      "name": "Ingredient name",
+      "category": "grain|vegetable|fruit|protein|dairy|oil|spice|other",
+      "isMajor": true,
+      "warnings": ["high-sugar", "high-fat", "allergen-nuts", "allergen-dairy", "allergen-gluten", "allergen-soy", "allergen-eggs"]
+    }
+  ],
+  "insights": ["High protein meal", "Contains dairy", "Low carb option"]
 }
 
 Rules:
@@ -67,6 +76,10 @@ Rules:
 - Confidence should be between 0 and 1
 - If multiple food items are visible, provide combined nutritional values
 - If the image doesn't contain food, set foodName to "Not Food" and all values to 0
+- For ingredients: identify 3-8 key ingredients, categorize them correctly
+- Set isMajor to true for main ingredients, false for minor/optional ones
+- Add warnings for: high sugar (>10g), high fat (>15g), common allergens
+- Provide 2-4 dietary insights based on the nutritional profile
 - Always respond with valid JSON only, no additional text`
           },
           {

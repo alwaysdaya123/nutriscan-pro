@@ -1,3 +1,10 @@
+export interface Ingredient {
+  name: string;
+  category: 'grain' | 'vegetable' | 'fruit' | 'protein' | 'dairy' | 'oil' | 'spice' | 'other';
+  isMajor: boolean;
+  warnings?: ('high-sugar' | 'high-fat' | 'allergen-nuts' | 'allergen-dairy' | 'allergen-gluten' | 'allergen-soy' | 'allergen-eggs')[];
+}
+
 export interface NutritionData {
   foodName: string;
   description: string;
@@ -12,6 +19,8 @@ export interface NutritionData {
   confidence: number;
   healthTips: string[];
   alternatives: string[];
+  ingredients: Ingredient[];
+  insights: string[];
 }
 
 export interface AnalysisState {
