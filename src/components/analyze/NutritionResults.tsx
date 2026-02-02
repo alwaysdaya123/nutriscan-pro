@@ -13,6 +13,7 @@ import { CalorieDisclaimer } from "./CalorieDisclaimer";
 import { ManualCorrectionForm } from "./ManualCorrectionForm";
 import { IngredientsList } from "./IngredientsList";
 import { NutritionInsights } from "./NutritionInsights";
+import { HealthScoreCard } from "./HealthScoreCard";
 
 interface NutritionResultsProps {
   data: NutritionData;
@@ -100,6 +101,11 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
 
   return (
     <div className="space-y-6 animate-scale-in">
+      {/* Health Score - Most prominent */}
+      {currentData.healthScore && (
+        <HealthScoreCard healthScore={currentData.healthScore} />
+      )}
+
       {/* Calorie Disclaimer */}
       <CalorieDisclaimer confidence={currentData.confidence} />
 

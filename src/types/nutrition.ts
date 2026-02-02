@@ -5,6 +5,15 @@ export interface Ingredient {
   warnings?: ('high-sugar' | 'high-fat' | 'allergen-nuts' | 'allergen-dairy' | 'allergen-gluten' | 'allergen-soy' | 'allergen-eggs')[];
 }
 
+export type HealthScoreLabel = 'excellent' | 'good' | 'average' | 'poor';
+
+export interface HealthScore {
+  score: number; // 0-100
+  label: HealthScoreLabel;
+  explanation: string;
+  suggestions: string[];
+}
+
 export interface NutritionData {
   foodName: string;
   description: string;
@@ -21,6 +30,7 @@ export interface NutritionData {
   alternatives: string[];
   ingredients: Ingredient[];
   insights: string[];
+  healthScore: HealthScore;
 }
 
 export interface AnalysisState {

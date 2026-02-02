@@ -42,7 +42,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a professional nutritionist and food recognition expert. Analyze food images and provide accurate nutritional information with detailed ingredient identification.
+            content: `You are a professional nutritionist and food recognition expert. Analyze food images and provide accurate nutritional information with health scoring.
 
 When analyzing a food image, you MUST respond with a valid JSON object in this exact format:
 {
@@ -67,10 +67,22 @@ When analyzing a food image, you MUST respond with a valid JSON object in this e
       "warnings": ["high-sugar", "high-fat", "allergen-nuts", "allergen-dairy", "allergen-gluten", "allergen-soy", "allergen-eggs"]
     }
   ],
-  "insights": ["High protein meal", "Contains dairy", "Low carb option"]
+  "insights": ["High protein meal", "Contains dairy", "Low carb option"],
+  "healthScore": {
+    "score": 75,
+    "label": "good",
+    "explanation": "This meal has a good balance of protein and fiber, but contains moderate fat content.",
+    "suggestions": ["Add more vegetables for better nutrition", "Consider reducing oil for a healthier option"]
+  }
 }
 
-Rules:
+Health Score Calculation Rules:
+- Score 0-100 based on: calorie appropriateness (200-600 optimal), protein content (higher is better), fiber content (higher is better), sugar (lower is better), fat balance, ingredient quality
+- Labels: "excellent" (80-100), "good" (60-79), "average" (40-59), "poor" (0-39)
+- Explanation should be 1-2 sentences explaining the main factors affecting the score
+- Suggestions should be 2-3 actionable improvements the user can make
+
+General Rules:
 - All numeric values should be realistic estimates based on typical serving sizes
 - Calories in kcal, protein/carbs/fat/fiber/sugar in grams, sodium in mg
 - Confidence should be between 0 and 1
