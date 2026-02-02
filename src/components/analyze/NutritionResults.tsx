@@ -11,6 +11,8 @@ import { useMeals } from "@/hooks/useMeals";
 import { useToast } from "@/hooks/use-toast";
 import { CalorieDisclaimer } from "./CalorieDisclaimer";
 import { ManualCorrectionForm } from "./ManualCorrectionForm";
+import { IngredientsList } from "./IngredientsList";
+import { NutritionInsights } from "./NutritionInsights";
 
 interface NutritionResultsProps {
   data: NutritionData;
@@ -134,6 +136,14 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
           </div>
         </div>
       </Card>
+
+      {/* Ingredients Section */}
+      {currentData.ingredients && currentData.ingredients.length > 0 && (
+        <IngredientsList ingredients={currentData.ingredients} />
+      )}
+
+      {/* Nutrition Insights */}
+      <NutritionInsights data={currentData} />
 
       {/* Manual Correction */}
       <ManualCorrectionForm data={currentData} onCorrect={handleCorrect} />
