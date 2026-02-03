@@ -32,6 +32,7 @@ export type Meal = {
   image_url: string | null;
   logged_at: string;
   created_at: string;
+  health_score: number | null;
 };
 
 export type MealInsert = Omit<Meal, 'id' | 'user_id' | 'created_at'>;
@@ -92,6 +93,7 @@ export type DailyStats = {
   totalCarbs: number;
   totalFat: number;
   mealCount: number;
+  averageHealthScore: number | null;
 };
 
 export type WeeklyStats = {
@@ -100,6 +102,7 @@ export type WeeklyStats = {
   averageProtein: number;
   averageCarbs: number;
   averageFat: number;
+  averageHealthScore: number | null;
 };
 
 export type PortionSize = 'small' | 'medium' | 'large';

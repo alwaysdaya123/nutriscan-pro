@@ -6,6 +6,7 @@ import { RecentMeals } from '@/components/dashboard/RecentMeals';
 import { Recommendations } from '@/components/dashboard/Recommendations';
 import { StreakCard } from '@/components/dashboard/StreakCard';
 import { GoalAlerts } from '@/components/dashboard/GoalAlerts';
+import { AverageHealthScore } from '@/components/dashboard/AverageHealthScore';
 import { FloatingActionButton } from '@/components/ui/floating-action-button';
 import { useMeals } from '@/hooks/useMeals';
 import { useAuth } from '@/contexts/AuthContext';
@@ -107,6 +108,7 @@ export default function DashboardPage() {
 
           {/* Right column - Sidebar */}
           <div className="space-y-6">
+            <AverageHealthScore todayStats={todayStats} weeklyStats={weeklyStats} />
             <MacroBreakdown todayStats={todayStats} />
             <Recommendations todayStats={todayStats} />
           </div>
