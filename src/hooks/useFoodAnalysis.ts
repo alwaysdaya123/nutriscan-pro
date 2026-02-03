@@ -96,6 +96,7 @@ export function useFoodAnalysis() {
       meal_type: mealType,
       image_url: null,
       logged_at: new Date().toISOString(),
+      health_score: nutritionData.healthScore?.score ?? null,
     });
 
     return result;

@@ -155,6 +155,7 @@ export type Database = {
           fat: number | null
           fiber: number | null
           food_name: string
+          health_score: number | null
           id: string
           image_url: string | null
           logged_at: string
@@ -173,6 +174,7 @@ export type Database = {
           fat?: number | null
           fiber?: number | null
           food_name: string
+          health_score?: number | null
           id?: string
           image_url?: string | null
           logged_at?: string
@@ -191,6 +193,7 @@ export type Database = {
           fat?: number | null
           fiber?: number | null
           food_name?: string
+          health_score?: number | null
           id?: string
           image_url?: string | null
           logged_at?: string

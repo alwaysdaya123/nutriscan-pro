@@ -83,6 +83,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         meal_type: mealType as any,
         image_url: imageUrl || null,
         logged_at: new Date().toISOString(),
+        health_score: currentData.healthScore?.score ?? null,
       });
       toast({
         title: 'Meal saved!',

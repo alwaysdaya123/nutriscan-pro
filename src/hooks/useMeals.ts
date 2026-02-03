@@ -34,6 +34,11 @@ export function useMeals() {
       setMeals(typedMeals);
       
       // Calculate today's stats
+      const mealsWithScores = typedMeals.filter(m => m.health_score !== null);
+      const avgHealthScore = mealsWithScores.length > 0
+        ? mealsWithScores.reduce((sum, m) => sum + (m.health_score || 0), 0) / mealsWithScores.length
+        : null;
+      
       const stats: DailyStats = {
         date: format(today, 'yyyy-MM-dd'),
         totalCalories: typedMeals.reduce((sum, m) => sum + m.calories, 0),
@@ -41,6 +46,7 @@ export function useMeals() {
         totalCarbs: typedMeals.reduce((sum, m) => sum + Number(m.carbs), 0),
         totalFat: typedMeals.reduce((sum, m) => sum + Number(m.fat), 0),
         mealCount: typedMeals.length,
+        averageHealthScore: avgHealthScore,
       };
       setTodayStats(stats);
       
@@ -82,6 +88,7 @@ export function useMeals() {
           totalCarbs: 0,
           totalFat: 0,
           mealCount: 0,
+          averageHealthScore: null,
         });
       }
       
@@ -100,6 +107,12 @@ export function useMeals() {
       const days = Array.from(dayMap.values());
       const daysWithData = days.filter(d => d.mealCount > 0);
       
+      // Calculate overall average health score
+      const allMealsWithScores = typedMeals.filter(m => m.health_score !== null);
+      const avgWeeklyHealthScore = allMealsWithScores.length > 0
+        ? allMealsWithScores.reduce((sum, m) => sum + (m.health_score || 0), 0) / allMealsWithScores.length
+        : null;
+      
       setWeeklyStats({
         days,
         averageCalories: daysWithData.length > 0 
@@ -114,6 +127,7 @@ export function useMeals() {
         averageFat: daysWithData.length > 0
           ? Math.round(daysWithData.reduce((sum, d) => sum + d.totalFat, 0) / daysWithData.length)
           : 0,
+        averageHealthScore: avgWeeklyHealthScore,
       });
       
     } catch (error) {
