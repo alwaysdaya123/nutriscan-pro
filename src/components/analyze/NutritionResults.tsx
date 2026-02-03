@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Flame, Beef, Wheat, Droplets, Apple, Cookie, AlertCircle, Lightbulb, RefreshCw, CheckCircle2, Save, Loader2 } from "lucide-react";
+import { Flame, Beef, Wheat, Droplets, Apple, Cookie, AlertCircle, Lightbulb, RefreshCw, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { NutritionData } from "@/types/nutrition";
@@ -14,6 +14,8 @@ import { ManualCorrectionForm } from "./ManualCorrectionForm";
 import { IngredientsList } from "./IngredientsList";
 import { NutritionInsights } from "./NutritionInsights";
 import { HealthScoreCard } from "./HealthScoreCard";
+import { ImagePreviewCard } from "./ImagePreviewCard";
+import { AlternativesSection } from "./AlternativesSection";
 
 interface NutritionResultsProps {
   data: NutritionData;
@@ -45,8 +47,6 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
   const [saving, setSaving] = useState(false);
   const [mealType, setMealType] = useState<string>('lunch');
   const [currentData, setCurrentData] = useState(data);
-  
-  const confidencePercent = Math.round(currentData.confidence * 100);
 
   const handleCorrect = (corrected: NutritionData) => {
     setCurrentData(corrected);
@@ -102,71 +102,60 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
 
   return (
     <div className="space-y-6 animate-scale-in">
-      {/* Health Score - Most prominent */}
-      {currentData.healthScore && (
-        <HealthScoreCard healthScore={currentData.healthScore} />
-      )}
+      {/* Hero Section: Image + Health Score side by side on desktop */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Image Preview with Zoom */}
+        {imageUrl && (
+          <ImagePreviewCard
+            imageUrl={imageUrl}
+            foodName={currentData.foodName}
+            confidence={currentData.confidence}
+          />
+        )}
+        
+        {/* Health Score - Most prominent */}
+        {currentData.healthScore && (
+          <HealthScoreCard healthScore={currentData.healthScore} />
+        )}
+      </div>
+
+      {/* Food Details Card */}
+      <Card className="overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
+              <p className="text-muted-foreground">{currentData.description}</p>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3">
+              <Flame className="h-6 w-6 text-primary" />
+              <div className="text-right">
+                <div className="text-3xl font-bold text-primary">{currentData.calories}</div>
+                <div className="text-xs text-muted-foreground">calories</div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Calorie Disclaimer */}
       <CalorieDisclaimer confidence={currentData.confidence} />
 
-      {/* Food Card */}
-      <Card className="overflow-hidden">
-        <div className="flex flex-col md:flex-row">
-          {imageUrl && (
-            <div className="relative h-48 md:h-auto md:w-1/3">
-              <img
-                src={imageUrl}
-                alt={currentData.foodName}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-xs font-medium backdrop-blur-sm">
-                <CheckCircle2 className="h-3 w-3 text-primary" />
-                {confidencePercent}% confidence
-              </div>
-            </div>
-          )}
-          <div className="flex-1 p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
-                <p className="mt-1 text-muted-foreground">{currentData.description}</p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold text-primary">{currentData.calories}</div>
-                <div className="text-sm text-muted-foreground">kcal</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Ingredients Section */}
-      {currentData.ingredients && currentData.ingredients.length > 0 && (
-        <IngredientsList ingredients={currentData.ingredients} />
-      )}
-
-      {/* Nutrition Insights */}
-      <NutritionInsights data={currentData} />
-
-      {/* Manual Correction */}
-      <ManualCorrectionForm data={currentData} onCorrect={handleCorrect} />
-
       {/* Nutrition Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {nutritionItems.map((item) => {
           const value = currentData[item.key as keyof typeof currentData] as number;
           const percentage = Math.min((value / item.max) * 100, 100);
           
           return (
-            <Card key={item.key} className="group transition-all hover:shadow-md">
+            <Card key={item.key} className="group transition-all duration-300 hover:shadow-md hover:border-primary/20">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-muted ${item.color}`}>
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-primary">
                       <item.icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -187,13 +176,27 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         })}
       </div>
 
+      {/* Ingredients Section */}
+      {currentData.ingredients && currentData.ingredients.length > 0 && (
+        <IngredientsList ingredients={currentData.ingredients} />
+      )}
+
+      {/* Nutrition Insights */}
+      <NutritionInsights data={currentData} />
+
+      {/* Smart Alternatives Section */}
+      <AlternativesSection 
+        alternatives={currentData.alternatives || []} 
+        currentCalories={currentData.calories} 
+      />
+
       {/* Additional Info Grid */}
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Sodium Card */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircle className="h-4 w-4 text-amber-500" />
+              <AlertCircle className="h-4 w-4 text-destructive" />
               Sodium
             </CardTitle>
           </CardHeader>
@@ -202,7 +205,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
               {currentData.sodium}
               <span className="text-sm font-normal text-muted-foreground ml-1">mg</span>
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground/80">
               {currentData.sodium < 500 ? "Low sodium content" : currentData.sodium < 1500 ? "Moderate sodium" : "High sodium content"}
             </p>
           </CardContent>
@@ -231,33 +234,14 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         )}
       </div>
 
-      {/* Alternatives */}
-      {currentData.alternatives && currentData.alternatives.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Healthier Alternatives</CardTitle>
-            <CardDescription>Consider these options for a healthier meal</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {currentData.alternatives.map((alt, index) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground"
-                >
-                  {alt}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Manual Correction */}
+      <ManualCorrectionForm data={currentData} onCorrect={handleCorrect} />
 
       {/* Save to Diary */}
       {user && (
-        <Card className="border-primary/20 bg-primary/5">
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
           <CardContent className="p-4">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="flex-1">
                 <p className="font-medium">Save to your food diary?</p>
                 <p className="text-sm text-muted-foreground">Track this meal in your daily log</p>
@@ -274,13 +258,15 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
                     <SelectItem value="snack">Snack</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button onClick={handleSaveMeal} disabled={saving}>
+                <Button onClick={handleSaveMeal} disabled={saving} className="min-w-[100px]">
                   {saving ? (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Save className="h-4 w-4 mr-2" />
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save
+                    </>
                   )}
-                  Save
                 </Button>
               </div>
             </div>
@@ -289,8 +275,8 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
       )}
 
       {/* Reset Button */}
-      <Button onClick={onReset} variant="outline" className="w-full">
-        <RefreshCw className="mr-2 h-4 w-4" />
+      <Button onClick={onReset} variant="outline" className="w-full group">
+        <RefreshCw className="mr-2 h-4 w-4 transition-transform group-hover:rotate-180" />
         Analyze Another Food
       </Button>
     </div>
