@@ -1,12 +1,13 @@
-import { ArrowRight, Camera, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Camera, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { FoodCarousel } from "./FoodCarousel";
 
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden gradient-hero">
-      <div className="container relative z-10 py-20 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+      <div className="container relative z-10 py-16 lg:py-28">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-8 animate-slide-up">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
               <Sparkles className="h-4 w-4" />
@@ -39,7 +40,7 @@ export function HeroSection() {
               </Button>
             </div>
             
-            <div className="flex items-center gap-8 pt-4">
+            <div className="flex items-center gap-6 pt-4 sm:gap-8">
               <div className="text-center">
                 <div className="text-2xl font-bold text-foreground">99%</div>
                 <div className="text-sm text-muted-foreground">Accuracy</div>
@@ -57,24 +58,15 @@ export function HeroSection() {
             </div>
           </div>
           
-          <div className="relative flex items-center justify-center lg:justify-end">
-            <div className="relative">
+          <div className="relative flex items-center justify-center lg:justify-end animate-fade-in">
+            <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg">
               {/* Decorative elements */}
               <div className="absolute -left-8 -top-8 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
               <div className="absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-accent blur-2xl" />
               
-              {/* Main illustration */}
+              {/* Food Carousel */}
               <div className="relative animate-float">
-                <div className="flex h-72 w-72 items-center justify-center rounded-3xl bg-gradient-to-br from-primary/20 to-accent/30 shadow-2xl backdrop-blur-sm sm:h-80 sm:w-80 lg:h-96 lg:w-96">
-                  <div className="relative">
-                    <div className="text-8xl">🥗</div>
-                    <div className="absolute -right-4 -top-4 animate-pulse-slow">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg">
-                        <Zap className="h-6 w-6" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <FoodCarousel />
               </div>
             </div>
           </div>

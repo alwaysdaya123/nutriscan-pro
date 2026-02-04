@@ -188,6 +188,10 @@ All colors MUST be HSL.
     animation: streakFire 1.5s ease-in-out infinite;
   }
 
+  .animate-scan-line {
+    animation: scanLine 2.5s ease-in-out infinite;
+  }
+
   .glass {
     @apply bg-card/80 backdrop-blur-md;
   }
@@ -309,6 +313,23 @@ All colors MUST be HSL.
   50% {
     transform: scale(1.1);
     filter: brightness(1.2);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
   }
 }
 
