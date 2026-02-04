@@ -2,19 +2,46 @@ import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-import foodImage1 from "@/assets/food-carousel-1.jpg";
-import foodImage2 from "@/assets/food-carousel-2.jpg";
-import foodImage3 from "@/assets/food-carousel-3.jpg";
-import foodImage4 from "@/assets/food-carousel-4.jpg";
+import foodBiryani from "@/assets/food-biryani.jpg";
+import foodDosa from "@/assets/food-dosa.jpg";
+import foodChicken65 from "@/assets/food-chicken65.jpg";
+import foodIdli from "@/assets/food-idli.jpg";
+import foodAndhraCurry from "@/assets/food-andhra-curry.jpg";
 
 const foodImages = [
-  { src: foodImage1, alt: "Fresh healthy salad bowl with grilled chicken" },
-  { src: foodImage2, alt: "Grilled salmon with asparagus" },
-  { src: foodImage3, alt: "Colorful smoothie bowl with berries" },
-  { src: foodImage4, alt: "Mediterranean grain bowl with falafel" },
+  { 
+    src: foodBiryani, 
+    alt: "Hyderabadi Chicken Biryani",
+    label: "Hyderabadi Biryani",
+    calories: "~350 kcal/serving"
+  },
+  { 
+    src: foodDosa, 
+    alt: "Crispy Masala Dosa with Sambar",
+    label: "Masala Dosa",
+    calories: "~200 kcal"
+  },
+  { 
+    src: foodChicken65, 
+    alt: "Spicy Chicken 65",
+    label: "Chicken 65",
+    calories: "~280 kcal/serving"
+  },
+  { 
+    src: foodIdli, 
+    alt: "Soft Idli with Sambar",
+    label: "Idli Sambar",
+    calories: "~150 kcal"
+  },
+  { 
+    src: foodAndhraCurry, 
+    alt: "Andhra Chicken Curry",
+    label: "Andhra Curry",
+    calories: "~320 kcal/serving"
+  },
 ];
 
-const SLIDE_INTERVAL = 3000; // 3 seconds
+const SLIDE_INTERVAL = 2500; // 2.5 seconds
 
 export function FoodCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,14 +58,16 @@ export function FoodCarousel() {
     return () => clearInterval(interval);
   }, [isPaused, goToNext]);
 
+  const currentFood = foodImages[currentIndex];
+
   return (
     <div 
-      className="relative w-full overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
+      className="relative w-full overflow-hidden rounded-2xl shadow-2xl group cursor-pointer border border-border/30"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <AspectRatio ratio={1}>
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full bg-muted">
           {foodImages.map((image, index) => (
             <div
               key={index}
@@ -55,20 +84,28 @@ export function FoodCarousel() {
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             </div>
           ))}
           
           {/* AI Scanning effect overlay */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent animate-scan-line" />
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-primary/80 to-transparent animate-scan-line" />
+          </div>
+          
+          {/* Food label badge */}
+          <div className="absolute top-4 left-4 animate-fade-in">
+            <div className="flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 border border-white/10">
+              <span className="text-white text-sm font-medium">{currentFood.label}</span>
+              <span className="text-white/70 text-xs">{currentFood.calories}</span>
+            </div>
           </div>
           
           {/* Bottom content */}
           <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
             <div className="text-white">
-              <p className="text-sm font-medium opacity-90">AI-Powered Analysis</p>
-              <p className="text-xs opacity-70">Snap • Scan • Know</p>
+              <p className="text-sm font-semibold opacity-95">AI-Powered Analysis</p>
+              <p className="text-xs opacity-75">Snap • Scan • Know</p>
             </div>
             
             {/* Indicator dots */}
@@ -91,8 +128,8 @@ export function FoodCarousel() {
           
           {/* Pause indicator */}
           {isPaused && (
-            <div className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs text-white backdrop-blur-sm animate-fade-in">
-              <span className="h-2 w-2 rounded-full bg-white/80" />
+            <div className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-xs text-white backdrop-blur-md animate-fade-in border border-white/10">
+              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
               Paused
             </div>
           )}

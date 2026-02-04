@@ -5,12 +5,12 @@ const features = [
   {
     icon: Camera,
     title: "Instant Recognition",
-    description: "Simply snap a photo and our AI instantly identifies your food items with remarkable accuracy.",
+    description: "Simply snap a photo of any Indian dish and our AI instantly identifies it with remarkable accuracy.",
   },
   {
     icon: BarChart3,
     title: "Detailed Nutrition",
-    description: "Get comprehensive breakdown of calories, protein, carbs, fats, fiber, and more.",
+    description: "Get comprehensive breakdown of calories, protein, carbs, fats, fiber, and more for traditional recipes.",
   },
   {
     icon: Zap,
@@ -25,7 +25,7 @@ const features = [
   {
     icon: Lightbulb,
     title: "Smart Suggestions",
-    description: "Discover healthier alternatives and nutritional improvements for your diet.",
+    description: "Discover healthier cooking methods and nutritional improvements for traditional dishes.",
   },
   {
     icon: Shield,
@@ -36,9 +36,9 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-20 lg:py-32">
+    <section id="features" className="py-16 lg:py-24 bg-muted/30">
       <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center mb-12 lg:mb-16">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Everything You Need for
             <span className="text-primary"> Smarter Eating</span>
@@ -48,21 +48,21 @@ export function FeaturesSection() {
           </p>
         </div>
         
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <Card
               key={feature.title}
-              className="group border-border/50 bg-card/50 transition-all duration-300 hover:border-primary/30 hover:shadow-lg animate-slide-up"
+              className="group border-border/50 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 animate-slide-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <CardHeader>
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <CardHeader className="pb-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-110">
                   <feature.icon className="h-6 w-6" />
                 </div>
-                <CardTitle className="mt-4 text-xl">{feature.title}</CardTitle>
+                <CardTitle className="mt-4 text-lg">{feature.title}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base leading-relaxed">
+              <CardContent className="pt-0">
+                <CardDescription className="text-sm leading-relaxed">
                   {feature.description}
                 </CardDescription>
               </CardContent>
