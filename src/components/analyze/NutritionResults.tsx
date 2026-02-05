@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { NutritionData } from "@/types/nutrition";
-import type { PortionSize } from "@/types/database";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMeals } from "@/hooks/useMeals";
 import { useToast } from "@/hooks/use-toast";
@@ -21,17 +20,10 @@ interface NutritionResultsProps {
   data: NutritionData;
   imageUrl?: string;
   onReset: () => void;
-  portionSize?: PortionSize;
   onDataCorrect?: (corrected: NutritionData) => void;
 }
 
-const portionLabels: Record<PortionSize, string> = {
-  small: 'Small (70%)',
-  medium: 'Medium (Standard)',
-  large: 'Large (140%)',
-};
-
-export function NutritionResults({ data, imageUrl, onReset, portionSize = 'medium', onDataCorrect }: NutritionResultsProps) {
+export function NutritionResults({ data, imageUrl, onReset, onDataCorrect }: NutritionResultsProps) {
   const { user } = useAuth();
   const { addMeal } = useMeals();
   const { toast } = useToast();
@@ -70,7 +62,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         fiber: currentData.fiber,
         sugar: currentData.sugar,
         sodium: currentData.sodium,
-        serving_size: `${portionLabels[portionSize]} - ${currentData.servingSize}`,
+        serving_size: currentData.servingSize,
         meal_type: mealType as any,
         image_url: imageUrl || null,
         logged_at: new Date().toISOString(),
@@ -112,7 +104,7 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
                 <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
                 <p className="text-muted-foreground text-sm">{currentData.description}</p>
                 <p className="text-xs text-muted-foreground/80">
-                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
+                  <span className="font-medium">Serving:</span> {currentData.servingSize}
                 </p>
               </div>
             </CardContent>
