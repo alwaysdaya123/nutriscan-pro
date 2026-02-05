@@ -1,21 +1,21 @@
 import { useState } from 'react';
-import { Flame, Beef, Wheat, Droplets, Apple, Cookie, AlertCircle, Lightbulb, RefreshCw, Save, Loader2 } from "lucide-react";
+import { RefreshCw, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { NutritionData } from "@/types/nutrition";
 import type { PortionSize } from "@/types/database";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMeals } from "@/hooks/useMeals";
 import { useToast } from "@/hooks/use-toast";
-import { CalorieDisclaimer } from "./CalorieDisclaimer";
 import { ManualCorrectionForm } from "./ManualCorrectionForm";
 import { IngredientsList } from "./IngredientsList";
 import { NutritionInsights } from "./NutritionInsights";
-import { HealthScoreCard } from "./HealthScoreCard";
 import { ImagePreviewCard } from "./ImagePreviewCard";
 import { AlternativesSection } from "./AlternativesSection";
+import { NutritionGrid } from "./NutritionGrid";
+import { SodiumCard } from "./SodiumCard";
+import { HealthScoreChart } from "./HealthScoreChart";
 
 interface NutritionResultsProps {
   data: NutritionData;
@@ -24,15 +24,6 @@ interface NutritionResultsProps {
   portionSize?: PortionSize;
   onDataCorrect?: (corrected: NutritionData) => void;
 }
-
-const nutritionItems = [
-  { key: "calories", label: "Calories", unit: "kcal", icon: Flame, color: "text-orange-500", max: 800 },
-  { key: "protein", label: "Protein", unit: "g", icon: Beef, color: "text-red-500", max: 50 },
-  { key: "carbs", label: "Carbs", unit: "g", icon: Wheat, color: "text-amber-500", max: 100 },
-  { key: "fat", label: "Fat", unit: "g", icon: Droplets, color: "text-yellow-500", max: 40 },
-  { key: "fiber", label: "Fiber", unit: "g", icon: Apple, color: "text-green-500", max: 30 },
-  { key: "sugar", label: "Sugar", unit: "g", icon: Cookie, color: "text-pink-500", max: 50 },
-] as const;
 
 const portionLabels: Record<PortionSize, string> = {
   small: 'Small (70%)',
@@ -101,80 +92,46 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
   };
 
   return (
-    <div className="space-y-6 animate-scale-in">
-      {/* Hero Section: Image + Health Score side by side on desktop */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Image Preview with Zoom */}
-        {imageUrl && (
-          <ImagePreviewCard
-            imageUrl={imageUrl}
-            foodName={currentData.foodName}
-            confidence={currentData.confidence}
-          />
-        )}
-        
-        {/* Health Score - Most prominent */}
-        {currentData.healthScore && (
-          <HealthScoreCard healthScore={currentData.healthScore} />
-        )}
-      </div>
-
-      {/* Food Details Card */}
-      <Card className="overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
-              <p className="text-muted-foreground">{currentData.description}</p>
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3">
-              <Flame className="h-6 w-6 text-primary" />
-              <div className="text-right">
-                <div className="text-3xl font-bold text-primary">{currentData.calories}</div>
-                <div className="text-xs text-muted-foreground">calories</div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Calorie Disclaimer */}
-      <CalorieDisclaimer confidence={currentData.confidence} />
-
-      {/* Nutrition Grid */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {nutritionItems.map((item) => {
-          const value = currentData[item.key as keyof typeof currentData] as number;
-          const percentage = Math.min((value / item.max) * 100, 100);
+    <div className="space-y-6 animate-fade-in">
+      {/* Main Two-Column Layout */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Left Column: Image Preview */}
+        <div className="space-y-4">
+          {imageUrl && (
+            <ImagePreviewCard
+              imageUrl={imageUrl}
+              foodName={currentData.foodName}
+              confidence={currentData.confidence}
+            />
+          )}
           
-          return (
-            <Card key={item.key} className="group transition-all duration-300 hover:shadow-md hover:border-primary/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-primary">
-                      <item.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">{item.label}</p>
-                      <p className="text-xl font-bold text-foreground">
-                        {typeof value === 'number' ? value.toFixed(item.key === 'calories' ? 0 : 1) : value}
-                        <span className="text-sm font-normal text-muted-foreground ml-1">
-                          {item.unit}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <Progress value={percentage} className="mt-3 h-2" />
-              </CardContent>
-            </Card>
-          );
-        })}
+          {/* Food Details */}
+          <Card className="overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+            <CardContent className="p-5">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
+                <p className="text-muted-foreground text-sm">{currentData.description}</p>
+                <p className="text-xs text-muted-foreground/80">
+                  <span className="font-medium">Serving:</span> {portionLabels[portionSize]} - {currentData.servingSize}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column: Nutrition Values */}
+        <div className="space-y-4">
+          <NutritionGrid data={currentData} />
+        </div>
       </div>
+
+      {/* Sodium Card - Standalone */}
+      <SodiumCard sodium={currentData.sodium} />
+
+      {/* Health Score Chart */}
+      {currentData.healthScore && (
+        <HealthScoreChart healthScore={currentData.healthScore} />
+      )}
 
       {/* Ingredients Section */}
       {currentData.ingredients && currentData.ingredients.length > 0 && (
@@ -190,49 +147,21 @@ export function NutritionResults({ data, imageUrl, onReset, portionSize = 'mediu
         currentCalories={currentData.calories} 
       />
 
-      {/* Additional Info Grid */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {/* Sodium Card */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircle className="h-4 w-4 text-destructive" />
-              Sodium
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-foreground">
-              {currentData.sodium}
-              <span className="text-sm font-normal text-muted-foreground ml-1">mg</span>
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground/80">
-              {currentData.sodium < 500 ? "Low sodium content" : currentData.sodium < 1500 ? "Moderate sodium" : "High sodium content"}
-            </p>
+      {/* Health Tips */}
+      {currentData.healthTips && currentData.healthTips.length > 0 && (
+        <Card className="bg-gradient-to-br from-primary/5 to-transparent">
+          <CardContent className="p-4">
+            <ul className="space-y-2">
+              {currentData.healthTips.slice(0, 3).map((tip, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-primary font-bold">•</span>
+                  {tip}
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
-
-        {/* Health Tips Card */}
-        {currentData.healthTips && currentData.healthTips.length > 0 && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Lightbulb className="h-4 w-4 text-primary" />
-                Health Tips
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-1">
-                {currentData.healthTips.slice(0, 3).map((tip, index) => (
-                  <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-primary">•</span>
-                    {tip}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+      )}
 
       {/* Manual Correction */}
       <ManualCorrectionForm data={currentData} onCorrect={handleCorrect} />

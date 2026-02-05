@@ -32,25 +32,28 @@ export default function AnalyzePage() {
   const adjustedData = getAdjustedData();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-background to-muted/20">
       <Header />
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-8 lg:py-12">
         <div className="container">
-          <div className="mx-auto max-w-2xl">
-            <div className="mb-8 text-center">
-              <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+          <div className="mx-auto max-w-4xl">
+            {/* Page Header */}
+            <div className="mb-8 text-center animate-fade-in">
+              <h1 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 Analyze Your Food
               </h1>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-3 text-muted-foreground text-lg max-w-xl mx-auto">
                 Upload or capture a photo of your meal to get instant nutritional insights
               </p>
             </div>
 
             {status === "idle" && (
-              <ImageUploader
-                onImageSelect={analyzeImage}
-                isLoading={false}
-              />
+              <div className="animate-scale-in">
+                <ImageUploader
+                  onImageSelect={analyzeImage}
+                  isLoading={false}
+                />
+              </div>
             )}
 
             {status === "uploading" && (
