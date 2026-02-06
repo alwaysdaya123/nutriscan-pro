@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Leaf, Heart, Github, Twitter, Mail } from "lucide-react";
+import { Leaf, Github, Twitter, Mail } from "lucide-react";
 import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
@@ -107,8 +107,8 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {currentYear} NutriScan. All rights reserved.
           </p>
-          <p className="flex items-center gap-1 text-sm text-muted-foreground">
-            Made with <Heart className="h-4 w-4 text-primary animate-pulse" /> for healthier living
+          <p className="text-sm text-muted-foreground">
+            Developed by Rentamallu Dayakar
           </p>
         </div>
       </div>

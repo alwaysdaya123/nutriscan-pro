@@ -170,8 +170,8 @@ export default function SettingsPage() {
               <span className="font-medium">2.0.0</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">AI Powered by</span>
-              <span className="font-medium">Lovable AI</span>
+              <span className="text-muted-foreground">Developed by</span>
+              <span className="font-medium">Rentamallu Dayakar</span>
             </div>
             <p className="text-sm text-muted-foreground pt-4">
               NutriScan uses advanced AI to help you track nutrition, plan meals, 
