@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { NotificationsDropdown } from '@/components/notifications/NotificationsDropdown';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { 
   Leaf, LayoutDashboard, UtensilsCrossed, User, Camera, LogOut, ChevronDown,
   Calendar, TrendingUp, Settings, History, Shield
@@ -100,6 +101,7 @@ export function DashboardHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <NotificationsDropdown
             notifications={notifications}
             unreadCount={unreadCount}

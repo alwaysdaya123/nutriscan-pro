@@ -10,10 +10,11 @@ import { Sparkles, Calendar, Loader2, Utensils } from 'lucide-react';
 import { useMealPlans } from '@/hooks/useMealPlans';
 import { useAuth } from '@/contexts/AuthContext';
 import { MotivationalMessage } from '@/components/progress/MotivationalMessage';
+import { AddMealPlanDialog } from '@/components/meal-planner/AddMealPlanDialog';
 
 export default function MealPlannerPage() {
   const { profile } = useAuth();
-  const { mealPlans, loading, generating, generateMealPlan, toggleMealCompletion, deleteMealPlan, getMealsByDate } = useMealPlans();
+  const { mealPlans, loading, generating, generateMealPlan, toggleMealCompletion, deleteMealPlan, getMealsByDate, refreshMealPlans } = useMealPlans();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [planDays, setPlanDays] = useState<string>('7');
 
@@ -39,6 +40,7 @@ export default function MealPlannerPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <AddMealPlanDialog selectedDate={selectedDateStr} onMealAdded={refreshMealPlans} />
             <Select value={planDays} onValueChange={setPlanDays}>
               <SelectTrigger className="w-[140px]">
                 <SelectValue />

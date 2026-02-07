@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Leaf, Github, Twitter, Mail } from "lucide-react";
+import { Leaf, Github, Mail, Heart, MessageCircle } from "lucide-react";
 import { Separator } from '@/components/ui/separator';
 
 export function Footer() {
@@ -20,13 +20,13 @@ export function Footer() {
               AI-powered food recognition and calorie estimation for smarter, healthier eating decisions.
             </p>
             <div className="flex items-center gap-3">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
-                <Twitter className="h-5 w-5" />
+              <a href="https://wa.me/917993275992" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="WhatsApp">
+                <MessageCircle className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
+              <a href="https://github.com/alwaysdaya123" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
                 <Github className="h-5 w-5" />
               </a>
-              <a href="mailto:support@nutriscan.app" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
+              <a href="mailto:alwaysdaya123@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
@@ -62,7 +62,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">Support</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="mailto:support@nutriscan.app" className="hover:text-foreground transition-colors">
+                <a href="mailto:alwaysdaya123@gmail.com" className="hover:text-foreground transition-colors">
                   Contact Us
                 </a>
               </li>
@@ -107,8 +107,8 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {currentYear} NutriScan. All rights reserved.
           </p>
-          <p className="text-sm text-muted-foreground">
-            Developed by Rentamallu Dayakar
+          <p className="flex items-center gap-1 text-sm text-muted-foreground">
+            Developed by Rentamallu Dayakar <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500" />
           </p>
         </div>
       </div>

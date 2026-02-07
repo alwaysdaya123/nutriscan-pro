@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export function Header() {
   const { user, profile, loading } = useAuth();
@@ -29,6 +30,7 @@ export function Header() {
           <span className="text-xl font-bold text-foreground">NutriScan</span>
         </Link>
         <nav className="flex items-center gap-4">
+          <ThemeToggle />
           <Link
             to="/"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hidden sm:block"
