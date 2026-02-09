@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useIsAdmin } from '@/hooks/useAdmin';
@@ -22,6 +23,7 @@ import {
 export function DashboardHeader() {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: isAdmin } = useIsAdmin();
   const {
     notifications,
@@ -51,7 +53,7 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 glass">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-14 items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-2 transition-opacity hover:opacity-80">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Leaf className="h-5 w-5" />
@@ -60,39 +62,33 @@ export function DashboardHeader() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          <Link to="/dashboard">
-            <Button variant="ghost" className="gap-2">
-              <LayoutDashboard className="h-4 w-4" />
-              Dashboard
-            </Button>
-          </Link>
-          <Link to="/analyze">
-            <Button variant="ghost" className="gap-2">
-              <Camera className="h-4 w-4" />
-              Analyze
-            </Button>
-          </Link>
-          <Link to="/meal-planner">
-            <Button variant="ghost" className="gap-2">
-              <Calendar className="h-4 w-4" />
-              Meal Plan
-            </Button>
-          </Link>
-          <Link to="/meals">
-            <Button variant="ghost" className="gap-2">
-              <UtensilsCrossed className="h-4 w-4" />
-              Meals
-            </Button>
-          </Link>
-          <Link to="/progress">
-            <Button variant="ghost" className="gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Progress
-            </Button>
-          </Link>
+          {[
+            { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+            { to: "/analyze", icon: Camera, label: "Analyze" },
+            { to: "/meal-planner", icon: Calendar, label: "Meal Plan" },
+            { to: "/meals", icon: UtensilsCrossed, label: "Meals" },
+            { to: "/progress", icon: TrendingUp, label: "Progress" },
+          ].map(({ to, icon: Icon, label }) => (
+            <Link key={to} to={to}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "gap-1.5 text-sm",
+                  location.pathname === to && "bg-primary/10 text-primary"
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </Button>
+            </Link>
+          ))}
           {isAdmin && (
             <Link to="/admin">
-              <Button variant="ghost" className="gap-2 text-primary">
+              <Button variant="ghost" size="sm" className={cn(
+                "gap-1.5 text-sm text-primary",
+                location.pathname.startsWith("/admin") && "bg-primary/10"
+              )}>
                 <Shield className="h-4 w-4" />
                 Admin
               </Button>
