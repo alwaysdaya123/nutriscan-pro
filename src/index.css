@@ -216,6 +216,11 @@ All colors MUST be HSL.
     @apply -translate-y-1 shadow-lg;
   }
 
+  /* Card hover glow */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:border-primary/20;
+  }
+
   /* Success checkmark animation */
   .animate-check {
     stroke-dasharray: 50;

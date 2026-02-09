@@ -1,12 +1,14 @@
 import { Leaf } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const { user, profile, loading } = useAuth();
+  const location = useLocation();
 
   const getInitials = () => {
     if (profile?.full_name) {
@@ -22,7 +24,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 glass">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Leaf className="h-5 w-5" />
@@ -33,13 +35,19 @@ export function Header() {
           <ThemeToggle />
           <Link
             to="/"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hidden sm:block"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-foreground hidden sm:block px-2 py-1 rounded-md",
+              location.pathname === "/" ? "text-primary bg-primary/10" : "text-muted-foreground"
+            )}
           >
             Home
           </Link>
           <Link
             to="/analyze"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hidden sm:block"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-foreground hidden sm:block px-2 py-1 rounded-md",
+              location.pathname === "/analyze" ? "text-primary bg-primary/10" : "text-muted-foreground"
+            )}
           >
             Analyze
           </Link>

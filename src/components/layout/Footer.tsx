@@ -59,21 +59,24 @@ export function Footer() {
           </div>
           
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">Support</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">Contact Us</h3>
+            <ul className="space-y-2.5 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
                 <a href="mailto:alwaysdaya123@gmail.com" className="hover:text-foreground transition-colors">
-                  Contact Us
+                  alwaysdaya123@gmail.com
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Help Center
+              <li className="flex items-center gap-2">
+                <Github className="h-4 w-4 text-primary" />
+                <a href="https://github.com/alwaysdaya123" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  github.com/alwaysdaya123
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  FAQ
+              <li className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4 text-primary" />
+                <a href="https://wa.me/917993275992" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  +91 7993275992
                 </a>
               </li>
             </ul>
@@ -91,11 +94,6 @@ export function Footer() {
                 <Link to="/terms" className="hover:text-foreground transition-colors">
                   Terms of Service
                 </Link>
-              </li>
-              <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Cookie Policy
-                </a>
               </li>
             </ul>
           </div>
