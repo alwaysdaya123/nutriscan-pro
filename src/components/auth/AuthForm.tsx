@@ -74,10 +74,9 @@ export function AuthForm({ mode }: AuthFormProps) {
           }
         } else {
           toast({
-            title: 'Welcome!',
-            description: 'Your account has been created successfully.',
+            title: 'Check your email',
+            description: 'We sent you a confirmation link. Please verify your email to sign in.',
           });
-          navigate('/dashboard');
         }
       } else {
         const result = signInSchema.safeParse({ email, password });
