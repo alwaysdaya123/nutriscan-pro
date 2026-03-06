@@ -84,11 +84,11 @@ export function NutritionResults({ data, imageUrl, onReset, onDataCorrect }: Nut
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-4">
       {/* Main Two-Column Layout */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Left Column: Image Preview */}
-        <div className="space-y-4">
+        <div className="space-y-3 animate-slide-up">
           {imageUrl && (
             <ImagePreviewCard
               imageUrl={imageUrl}
@@ -99,9 +99,9 @@ export function NutritionResults({ data, imageUrl, onReset, onDataCorrect }: Nut
           
           {/* Food Details */}
           <Card className="overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-            <CardContent className="p-5">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-foreground">{currentData.foodName}</h2>
+            <CardContent className="p-4">
+              <div className="space-y-1.5">
+                <h2 className="text-xl font-bold text-foreground">{currentData.foodName}</h2>
                 <p className="text-muted-foreground text-sm">{currentData.description}</p>
                 <p className="text-xs text-muted-foreground/80">
                   <span className="font-medium">Serving:</span> {currentData.servingSize}
@@ -112,7 +112,7 @@ export function NutritionResults({ data, imageUrl, onReset, onDataCorrect }: Nut
         </div>
 
         {/* Right Column: Nutrition Values */}
-        <div className="space-y-4">
+        <div className="space-y-3 animate-slide-up" style={{ animationDelay: '150ms' }}>
           <NutritionGrid data={currentData} />
         </div>
       </div>
