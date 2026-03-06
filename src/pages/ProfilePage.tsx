@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Loader2, Save, User, Activity, Target, Utensils } from 'lucide-react';
 import { AccountInfo } from '@/components/profile/AccountInfo';
+import { ChangePassword } from '@/components/profile/ChangePassword';
 
 export default function ProfilePage() {
   const { profile, user } = useAuth();
@@ -99,6 +100,9 @@ export default function ProfilePage() {
         <div className="space-y-6">
           {/* Account Security Info */}
           <AccountInfo />
+
+          {/* Change Password */}
+          <ChangePassword />
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info */}
