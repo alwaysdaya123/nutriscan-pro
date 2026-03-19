@@ -112,18 +112,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    const { error } = await signInWithGoogle();
-    if (error) {
-      toast({
-        title: 'Google sign in failed',
-        description: error.message,
-        variant: 'destructive',
-      });
-      setGoogleLoading(false);
-    }
-  };
 
   return (
     <Card className="w-full max-w-md mx-auto glass animate-scale-in">
