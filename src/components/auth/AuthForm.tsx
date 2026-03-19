@@ -26,7 +26,7 @@ type AuthFormProps = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const navigate = useNavigate();
-  const { signIn, signUp, signInWithGoogle } = useAuth();
+  const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   
   const [email, setEmail] = useState('');
