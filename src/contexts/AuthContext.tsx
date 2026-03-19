@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { lovable } from '@/integrations/lovable';
+
 import type { Profile } from '@/types/database';
 
 type AuthContextType = {
@@ -11,7 +11,7 @@ type AuthContextType = {
   loading: boolean;
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signInWithGoogle: () => Promise<{ error: Error | null }>;
+  
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 };
@@ -106,13 +106,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error: error as Error | null };
   };
 
-  const signInWithGoogle = async () => {
-    const { error } = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: `${window.location.origin}/dashboard`,
-    });
-    
-    return { error: error as Error | null };
-  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -127,7 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loading,
       signUp,
       signIn,
-      signInWithGoogle,
+      
       signOut,
       refreshProfile,
     }}>
