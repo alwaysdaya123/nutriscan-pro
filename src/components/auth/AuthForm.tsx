@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -257,26 +257,26 @@ export function AuthForm({ mode }: AuthFormProps) {
           {mode === 'signin' ? (
             <>
               Don't have an account?{' '}
-              <a href="/auth/signup" className="text-primary hover:underline font-medium">
+              <Link to="/auth/signup" className="text-primary hover:underline font-medium">
                 Sign up
-              </a>
+              </Link>
             </>
           ) : (
             <>
               Already have an account?{' '}
-              <a href="/auth/signin" className="text-primary hover:underline font-medium">
+              <Link to="/auth/signin" className="text-primary hover:underline font-medium">
                 Sign in
-              </a>
+              </Link>
             </>
           )}
         </p>
         {mode === 'signin' && (
-          <a
-            href="/auth/forgot-password"
+          <Link
+            to="/auth/forgot-password"
             className="text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             Forgot your password?
-          </a>
+          </Link>
         )}
       </CardFooter>
     </Card>
