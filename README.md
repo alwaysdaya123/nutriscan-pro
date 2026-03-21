@@ -66,11 +66,11 @@ Users can upload food images, view nutritional insights, and monitor their eatin
 ## 🖥️ Tech Stack
 
 **Frontend:**
-- Angular / React  
+- Angular  
 - HTML, CSS, TypeScript  
 
 **Backend (if applicable):**
-- .NET / Flask / REST API  
+- Flask / REST API  
 
 **Machine Learning:**
 - CNN model for food recognition  
