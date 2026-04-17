@@ -64,10 +64,17 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         const { error } = await signUp(email, password, fullName);
         if (error) {
-          if (error.message.includes('already registered')) {
+          const msg = error.message.toLowerCase();
+          if (msg.includes('already registered') || msg.includes('already been registered')) {
             toast({
               title: 'Account exists',
               description: 'This email is already registered. Please sign in instead.',
+              variant: 'destructive',
+            });
+          } else if (msg.includes('signups not allowed') || msg.includes('signup_disabled') || msg.includes('signup is disabled')) {
+            toast({
+              title: 'Signups disabled',
+              description: 'Signup is currently disabled. Please try again later or contact support.',
               variant: 'destructive',
             });
           } else {
